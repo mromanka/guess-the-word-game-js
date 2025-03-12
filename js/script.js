@@ -1,34 +1,16 @@
 // 1. CREATE GLOBAL VARIABLES TO TARGET HTML ELEMENTS
 
-// UNORDERED LIST WHERE THE PLAYER'S GUESSED LETTERS WILL APPEAR
-const guessedLettersElement = document.querySelector(".guessed-letters");
+const guessedLettersElement = document.querySelector(".guessed-letters"); // UNORDERED LIST WHERE THE PLAYER'S GUESSED LETTERS WILL APPEAR
+const guessButton = document.querySelector(".guess"); // BUTTON WITH THE TEXT "GUESS!" IN IT
+const guessLetterInput = document.querySelector(".letter"); // TEXT INPUT WHERE PLAYER WILL GUESS A LETTER
+const wordInProgress = document.querySelector(".word-in-progress"); // EMPTY PARAGRAPH WHERE THE WORD IN PROGRESS WILL APPEAR
+const remainingGuesses = document.querySelector(".remaining"); // PARAGRAPH WHERE THE REMAINING GUESSES WILL DISPLAY
+const remainingGuessesSpan = document.querySelector(".remaining span"); // SPAN INSIDE THE PARAGRAPH WHERE REMAINING GUESSES WILL DISPLAY
+const message = document.querySelector(".message"); // EMPTY PARAGRAPH WHERE MESSAGES WILL APPEAR WHEN THE PLAYER GUESSES A LETTER
+const playAgainButton = document.querySelector(".play-again"); // HIDDEN BUTTON THAT WILL APPEAR PROMPTING PLAYER TO PLAY AGAIN
 
-// BUTTON WITH THE TEXT "GUESS!" IN IT
-const guessButton = document.querySelector(".guess");
-
-// TEXT INPUT WHERE PLAYER WILL GUESS A LETTER
-const guessLetterInput = document.querySelector(".letter");
-
-// EMPTY PARAGRAPH WHERE THE WORD IN PROGRESS WILL APPEAR
-const wordInProgress = document.querySelector(".word-in-progress")
-
-// PARAGRAPH WHERE THE REMAINING GUESSES WILL DISPLAY
-const remainingGuesses = document.querySelector(".remaining");
-
-// SPAN INSIDE THE PARAGRAPH WHERE REMAINING GUESSES WILL DISPLAY
-const remainingGuessesSpan = document.querySelector(".remaining span");
-
-// EMPTY PARAGRAPH WHERE MESSAGES WILL APPEAR WHEN THE PLAYER GUESSES A LETTER
-const message = document.querySelector(".message");
-
-// HIDDEN BUTTON THAT WILL APPEAR PROMPTING PLAYER TO PLAY AGAIN
-const playAgainButton = document.querySelector(".play-again");
-
-// STARTING WORD TO TEST OUT THE GAME
-const word = "magnolia";
-
-// ARRAY FOR GUESSED LETTERS
-let guessedLetters = [];
+const word = "magnolia"; // STARTING WORD TO TEST OUT THE GAME
+let guessedLetters = []; // ARRAY FOR GUESSED LETTERS
 
 // 2. WRITE A FUNCTION TO ADD PLACEHOLDERS FOR EACH LETTER THAT WILL APPEAR IN THE WORD IN PROGRESS ELEMENT (CREATE AN ARRAY, LOOP THROUGH EACH LETTER OF THE WORD AND ADD IT TO THE END OF THE ARRAY AS THE SYMBOL, JOIN ARRAY BACK TO A STRING AND DISPLAY AS WORD IN PROGRESS)
 
@@ -81,5 +63,46 @@ const makeGuess = function(guess){
     } else {
         guessedLetters.push(guess);
         console.log(guessedLetters);
+        displayGuessedLetters();
+        updateWordInProgress(guessedLetters);
+    };
+};
+
+// 6. WRITE A FUNCTION TO SHOW THE GUESSED LETTERS (LOOP THROUGH EACH LETTER OF THE guessedLetters ARRAY, CREATE A NEW LIST ITEM FOR EACH LETTER, ADD NEW LIST ITEM TO THE guessedLettersElement)
+
+const displayGuessedLetters = function(){
+    guessedLettersElement.innerHTML = "";
+    for (const letter of guessedLetters){
+    const listItem = document.createElement("li");
+    listItem.innerText = letter;
+    guessedLettersElement.append(listItem);
+    };
+};
+
+// 7. WRITE A FUNCTION TO UPDATE THE WORD IN PROGRESS WITH THE CORRECTLY GUESSED LETTERS TO REPLACE THE PLACEHOLDER SYMBOLS
+
+const updateWordInProgress = function(guessedLetters){
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+
+    const showWord = [];
+    for (const letter of wordArray){
+        if (guessedLetters.includes(letter)){
+            showWord.push(letter.toUpperCase());
+        } else {
+            showWord.push("●");
+        };
+    };
+    console.log(wordArray);
+    wordInProgress.innerText = showWord.join("");
+    checkIfPlayerWon();
+};
+
+// 8. WRITE A FUNCTION TO CHECK IF THE PLAYER WON
+
+const checkIfPlayerWon = function(){
+    if (word.toUpperCase() === wordInProgress.innerText){
+        message.classList.add("win");
+        message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`
     };
 };
