@@ -124,6 +124,7 @@ const countGuessesRemaining = function (guess){
     };
     if (remainingGuesses === 0){
         message.innerHTML = `Game over! The word is <span class ="highlight">${word}`;
+        startOver();
     } else if (remainingGuesses === 1){
         remainingGuessesSpan.innerText = `${remainingGuesses} guess`;
     } else {
@@ -136,6 +137,33 @@ const countGuessesRemaining = function (guess){
 const checkIfPlayerWon = function(){
     if (word.toUpperCase() === wordInProgress.innerText){
         message.classList.add("win");
-        message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`
+        message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+        startOver();
     };
 };
+
+// 11. FUNCTION TO HIDE ELEMENTS AND SHOW PLAY AGAIN BUTTON
+
+const startOver = function(){
+    guessButton.classList.add("hide");
+    remainingGuessesElement.classList.add("hide");
+    guessedLettersElement.classList.add("hide");
+    playAgainButton.classList.remove("hide");
+};
+
+// 12. ADD CLICK EVENT TO PLAY AGAIN BUTTON - RESET TO ORIGINAL VALUES AND GRAB A NEW RANDOM WORD
+
+playAgainButton.addEventListener("click", function(){
+    message.classList.remove("win");
+    message.innerText = "";
+    guessedLettersElement.innerHTML = "";
+    remainingGuesses = 8;
+    guessedLetters = [];
+    remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;    
+    guessButton.classList.remove("hide");
+    remainingGuessesElement.classList.remove("hide");
+    guessedLettersElement.classList.remove("hide");
+    playAgainButton.classList.add("hide");
+    
+    getWord();
+})
